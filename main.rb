@@ -1,7 +1,7 @@
 require 'open-uri'
 require 'yaml'
 
-def r
+def main
   load './main.rb'
 end
 
