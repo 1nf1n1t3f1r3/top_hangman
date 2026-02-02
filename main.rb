@@ -21,13 +21,16 @@ def get_input(guessed_letters)
     return :save if input == ':save'
     return :load if input == ':load'
 
-    if input.length != 1 || input !~ /[a-z]/
-      puts 'Please enter a single letter (a-z).'
-    elsif guessed_letters.include?(input)
-      puts 'You already guessed that letter.'
-    else
-      return input
+    if input !~ /\A[a-z]+\z/
+      puts 'Only letters a-z are allowed.'
+      next
     end
+
+    if (input.length == 1) && guessed_letters.include?(input)
+      puts 'You already guessed that letter.'
+      next
+    end
+    return input
   end
 end
 
@@ -86,6 +89,8 @@ def play_round(min_length, max_length, rounds)
 
   while rounds_left > 0
     input = get_input(guessed_letters)
+
+    # Save
     if input == :save
       game_state = {
         secret_word: secret_word,
@@ -93,10 +98,11 @@ def play_round(min_length, max_length, rounds)
         rounds_left: rounds_left
       }
       save_game(game_state)
-      puts 'Exiting game.'
+      puts 'Saving & Exiting game.'
       return
     end
 
+    # Load
     if input == :load
       state = load_game
       if state
@@ -111,6 +117,19 @@ def play_round(min_length, max_length, rounds)
       end
     end
 
+    # Tried Guessing a Word
+    if input.length > 1
+      if input == secret_word
+        puts '🎉 Winner! You guessed the word!'
+        return
+      else
+        puts 'Wrong word!'
+        rounds_left -= 1
+        next
+      end
+    end
+
+    # Else: Proceed normally
     guessed_letters << input
 
     display = display_word(secret_word, guessed_letters)
@@ -125,4 +144,5 @@ def play_round(min_length, max_length, rounds)
   puts 'Loss!'
 end
 
+# Play Round(Min_Word_Length, Max_Word_Length, Round_Count)
 play_round(4, 10, 3)
