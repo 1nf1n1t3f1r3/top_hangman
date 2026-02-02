@@ -15,7 +15,7 @@ end
 
 def get_input(guessed_letters)
   loop do
-    print "Guess a letter (a-z) or type ':save', or type ';load': "
+    print "Guess a letter (a-z) or type ':save', or type ':load': "
     input = gets.chomp.downcase
 
     return :save if input == ':save'
@@ -84,7 +84,7 @@ end
 def play_round(min_length, max_length, rounds)
   rounds_left = rounds
   guessed_letters = []
-  secret_word = pick_word(15, 21)
+  secret_word = pick_word(min_length, max_length)
   puts secret_word
 
   while rounds_left > 0
@@ -133,6 +133,8 @@ def play_round(min_length, max_length, rounds)
     guessed_letters << input
 
     display = display_word(secret_word, guessed_letters)
+    puts "Guessed letters: #{guessed_letters.join(', ')}"
+    puts "Rounds left: #{rounds_left}"
 
     unless display.include?('_')
       puts '🎉 Winner!'
@@ -142,6 +144,7 @@ def play_round(min_length, max_length, rounds)
   end
 
   puts 'Loss!'
+  puts "The word was: #{secret_word}"
 end
 
 # Play Round(Min_Word_Length, Max_Word_Length, Round_Count)
