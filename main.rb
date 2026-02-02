@@ -104,6 +104,9 @@ def play_round(min_length, max_length, rounds)
         guessed_letters = state[:guessed_letters]
         rounds_left = state[:rounds_left]
         puts 'Game loaded!'
+        puts rounds_left
+        puts guessed_letters
+        display = display_word(secret_word, guessed_letters)
         next
       end
     end
